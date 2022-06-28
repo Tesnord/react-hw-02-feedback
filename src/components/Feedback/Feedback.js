@@ -1,8 +1,8 @@
-import React from 'react'
-import Controls from './Controls'
-import Value from './Value'
+import React, { Component } from 'react'
+import Buttons from './Buttons'
+import Statistics from './Statistics'
 
-class Feedback extends React.Component {
+class Feedback extends Component {
 
   static defaultProps = {
     good: 0,
@@ -20,49 +20,28 @@ class Feedback extends React.Component {
     bad: this.props.bad
   }
 
-
-  clickGood = event => {
-    this.setState(prevState => ({
-      good: prevState.good + 1
+  increment = (eventBtn) => {
+    const { name } = eventBtn.currentTarget
+    this.setState((prevState) => ({
+      [name]: prevState[name] + 1
     }))
   }
-
-  clickNeutral = event => {
-    this.setState(prevState => ({
-      neutral: prevState.neutral + 1
-    }))
-  }
-
-  clickBad = event => {
-    this.setState(prevState => ({
-      bad: prevState.bad + 1
-    }))
-  }
-
-  eventBtn = [
-    {
-      key: "good",
-      event: this.clickGood
-    },
-    {
-      key: "neutral",
-      event: this.clickNeutral
-    },
-    {
-      key: "bad",
-      event: this.clickBad
-    }
-  ]
 
   render() {
+    const total = this.state.good + this.state.neutral + this.state.bad
     return (
       <div>
-        <Value
-          valueGood={this.state.good}
-          valueNeutral={this.state.neutral}
-          valueBad={this.state.bad} />
-        <Controls
+        <h1>Please leave feedback</h1>
+        <Buttons
+          state={this.state}
+          increment={this.increment}
         />
+        <h2>Statistics</h2>
+        {total > 0 ? (
+          <Statistics state={this.state} />
+        ) : (
+          <p>There is no feedback</p>
+        )}
       </div>
     )
   }
